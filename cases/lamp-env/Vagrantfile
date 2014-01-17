@@ -1,0 +1,22 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # precise64 is the box name we will use, if not found it will try to
+  # downlaod the box from whatever we specify on config.vm.box_url
+  config.vm.box = "precise64"
+  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+  config.vm.hostname = "lamp"
+  config.vbguest.auto_update = "false"
+
+  config.vm.synced_folder "code", "/var/www/code"
+
+  config.vm.network "forwarded_port", guest: 80, host:8080
+  config.vm.provision "shell", inline: "apt-get update"
+  config.vm.provision "shell", path: "provision/install.sh"
+
+end
